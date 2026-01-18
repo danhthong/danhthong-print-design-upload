@@ -9,16 +9,42 @@ jQuery(function ($) {
     preserveObjectStacking: true,
   });
 
+  window.wcpduFabricCanvas = canvas;
+
+  function removePreviousUserImages() {
+    const toRemove = canvas.getObjects().filter(function (obj) {
+      return obj && obj.wcpduType === "user-image";
+    });
+
+    toRemove.forEach(function (obj) {
+      canvas.remove(obj);
+    });
+
+    canvas.discardActiveObject();
+    canvas.renderAll();
+  }
+
+  function exportCanvasPNG() {
+    // Ensure selection borders/controls are not rendered into the export
+    canvas.discardActiveObject();
+    canvas.renderAll();
+
+    const dataURL = canvas.toDataURL({
+      format: "png",
+      quality: 1,
+      enableRetinaScaling: true,
+    });
+
+    return dataURL;
+  }
+
   /**
    * 1️⃣ Load product image as background
    */
   fabric.Image.fromURL(
     wcpduCustomizer.productImage,
     function (img) {
-      const scale = Math.min(
-        canvas.width / img.width,
-        canvas.height / img.height,
-      );
+      const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
 
       img.set({
         originX: "center",
@@ -32,7 +58,7 @@ jQuery(function ($) {
       img.scale(scale);
       canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
     },
-    { crossOrigin: "anonymous" },
+    { crossOrigin: "anonymous" }
   );
 
   /**
@@ -43,6 +69,8 @@ jQuery(function ($) {
     if (!file || !file.type.match(/^image\//)) {
       return;
     }
+
+    removePreviousUserImages();
 
     const reader = new FileReader();
     reader.onload = function (evt) {
@@ -56,7 +84,7 @@ jQuery(function ($) {
           borderColor: "#2271b1",
           cornerSize: 10,
           transparentCorners: false,
-          wcpduType: "user-image", // 👈 đánh dấu
+          wcpduType: "user-image",
         });
 
         img.scaleToWidth(canvas.width * 0.4);
@@ -91,10 +119,7 @@ jQuery(function ($) {
       return;
     }
 
-    const dataURL = canvas.toDataURL({
-      format: "png",
-      quality: 1,
-    });
+    const dataURL = exportCanvasPNG();
 
     let $input = $("#wcpdu-custom-design");
     if (!$input.length) {

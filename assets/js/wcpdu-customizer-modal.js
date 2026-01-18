@@ -12,10 +12,16 @@
   }
 
   function getCanvasDataURL() {
-    var canvasEl = document.getElementById("wcpdu-canvas");
-    if (!canvasEl) return "";
+    if (!window.wcpduFabricCanvas) return "";
+
+    window.wcpduFabricCanvas.discardActiveObject();
+    window.wcpduFabricCanvas.renderAll();
+
     try {
-      return canvasEl.toDataURL("image/png");
+      return window.wcpduFabricCanvas.toDataURL({
+        format: "png",
+        quality: 1,
+      });
     } catch (e) {
       return "";
     }
@@ -105,6 +111,14 @@
 
   $(document).on("click", ".wcpdu-apply", function (e) {
     e.preventDefault();
+
+    // Remove active object selection before exporting
+    if (window.wcpduFabricCanvas && typeof window.wcpduFabricCanvas.discardActiveObject === "function") {
+      window.wcpduFabricCanvas.discardActiveObject();
+      if (typeof window.wcpduFabricCanvas.renderAll === "function") {
+        window.wcpduFabricCanvas.renderAll();
+      }
+    }
 
     var dataUrl = getCanvasDataURL();
     if (!dataUrl) {
