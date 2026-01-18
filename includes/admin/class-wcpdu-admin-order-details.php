@@ -1,6 +1,6 @@
 <?php
 /**
- * Display uploaded design files in Admin Order Details
+ * Display uploaded design files in Admin Order Line Items (per item) with frontend-like lightbox.
  *
  * Meta key source: wcpdu_design_files (ORDER ITEM META)
  *
@@ -21,92 +21,156 @@ class WCPDU_Admin_Order_Details {
 	private $meta_key = 'wcpdu_design_files';
 
 	/**
+	 * Ensure lightbox markup is printed once.
+	 *
+	 * @var bool
+	 */
+	private $printed_lightbox_markup = false;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
 
-		// Show in Admin Order page (top section)
+		// Render inside each line item in admin order items table.
 		add_action(
-			'woocommerce_admin_order_data_after_order_details',
-			array( $this, 'render_order_design_files' )
+			'woocommerce_after_order_itemmeta',
+			array( $this, 'render_item_design_files' ),
+			10,
+			3
+		);
+
+		// Enqueue lightbox assets on order edit screens only.
+		add_action(
+			'admin_enqueue_scripts',
+			array( $this, 'enqueue_admin_assets' )
+		);
+
+		// Print the same lightbox markup as frontend in admin footer.
+		add_action(
+			'admin_footer',
+			array( $this, 'print_lightbox_markup' )
 		);
 	}
 
 	/**
-	 * Render uploaded design files in admin order page
+	 * Enqueue lightbox assets on WooCommerce order edit screens.
 	 *
-	 * @param WC_Order $order
+	 * @param string $hook_suffix
+	 * @return void
 	 */
-	public function render_order_design_files( $order ) {
-
-		if ( ! $order instanceof WC_Order ) {
+	public function enqueue_admin_assets( $hook_suffix ) {
+		if ( ! $this->is_order_screen() ) {
 			return;
 		}
 
-		$items = $order->get_items();
+		$ver = defined( 'WCPDU_VERSION' ) ? WCPDU_VERSION : '1.0.0';
 
-		if ( empty( $items ) ) {
+		wp_enqueue_style(
+			'wcpdu-lightbox',
+			WCPDU_PLUGIN_URL . 'assets/css/wcpdu-lightbox.css',
+			array(),
+			$ver
+		);
+
+		wp_enqueue_script(
+			'wcpdu-lightbox',
+			WCPDU_PLUGIN_URL . 'assets/js/wcpdu-lightbox.js',
+			array( 'jquery' ),
+			$ver,
+			true
+		);
+	}
+
+	/**
+	 * Print frontend-like lightbox markup in admin footer (once).
+	 *
+	 * @return void
+	 */
+	public function print_lightbox_markup() {
+		if ( ! $this->is_order_screen() ) {
 			return;
 		}
 
-		echo '<div class="form-field form-field-wide wc-customer-uploaded-design-files">';
-		echo '<div class="wcpdu-order-design-files">';
-		echo '<h3>' . esc_html__( 'Customer Design Files', 'wcpdu' ) . '</h3>';
+		if ( $this->printed_lightbox_markup ) {
+			return;
+		}
 
-		foreach ( $items as $item ) {
+		$this->printed_lightbox_markup = true;
+		?>
+		<div id="wcpdu-lightbox" style="display:none;">
+			<div class="wcpdu-lightbox-overlay"></div>
+			<div class="wcpdu-lightbox-content">
+				<img src="" alt="">
+				<span class="wcpdu-lightbox-close">&times;</span>
+			</div>
+		</div>
+		<?php
+	}
 
-			/**
-			 * 🔥 READ FROM ORDER ITEM META
-			 * meta_key = wcpdu_design_files
-			 */
-			$files = $item->get_meta( $this->meta_key );
+	/**
+	 * Render uploaded design files for a single order item (admin).
+	 *
+	 * Adds data-wcpdu-lightbox attribute so existing JS can bind as on frontend.
+	 *
+	 * @param int             $item_id
+	 * @param WC_Order_Item   $item
+	 * @param WC_Product|bool $product
+	 * @return void
+	 */
+	public function render_item_design_files( $item_id, $item, $product ) {
 
-			if ( empty( $files ) || ! is_array( $files ) ) {
+		if ( ! $this->is_order_screen() ) {
+			return;
+		}
+
+		if ( ! $item instanceof WC_Order_Item ) {
+			return;
+		}
+
+		$files = $item->get_meta( $this->meta_key );
+
+		if ( empty( $files ) || ! is_array( $files ) ) {
+			return;
+		}
+
+		echo '<div class="wcpdu-order-item-files" style="margin-top:8px;">';
+		echo '<strong>' . esc_html__( 'Design Files', 'wcpdu' ) . '</strong>';
+		echo '<ul style="margin:8px 0 0;display:flex;gap:12px;">';
+
+		foreach ( $files as $file ) {
+
+			$file_url  = isset( $file['url'] ) ? (string) $file['url'] : '';
+			$file_name = isset( $file['name'] ) ? (string) $file['name'] : '';
+
+			if ( empty( $file_url ) ) {
 				continue;
 			}
 
-			echo '<div class="wcpdu-order-item-files" style="margin-bottom:20px;">';
-			echo '<strong>' . esc_html( $item->get_name() ) . '</strong>';
+			$file_url_esc = esc_url( $file_url );
+			$label        = $file_name ? esc_html( $file_name ) : esc_html__( 'Download file', 'wcpdu' );
 
-			echo '<ul style="margin-top:10px;">';
+			echo '<li style="margin:0 0 12px;display:flex;flex-direction:column;">';
 
-			foreach ( $files as $file ) {
-
-				$file_url  = isset( $file['url'] ) ? esc_url( $file['url'] ) : '';
-				$file_name = isset( $file['name'] ) ? esc_html( $file['name'] ) : '';
-
-				if ( empty( $file_url ) ) {
-					continue;
-				}
-
-				echo '<li style="margin-bottom:12px;">';
-
-				// Image preview (detect by file extension, NOT mime)
-				if ( $this->is_image( $file_url ) ) {
-					echo '<img src="' . esc_url( $file_url ) . '"
-						style="max-width:240px;display:block;margin-bottom:6px;
-						border:1px solid #ddd;padding:3px;background:#fff;"
-						alt="' . esc_attr( $file_name ) . '" />';
-				}
-
-				// File link
-				echo '<a href="' . esc_url( $file_url ) . '" target="_blank" rel="noopener noreferrer">';
-				echo $file_name ? esc_html( $file_name ) : esc_html__( 'View file', 'wcpdu' );
+			if ( $this->is_image( $file_url ) ) {
+				echo '<a href="' . $file_url_esc . '" data-wcpdu-lightbox="1">';
+				echo '<img src="' . $file_url_esc . '" style="max-width:150px;display:block;margin:6px 0;border:1px solid #ddd;padding:3px;background:#fff;" alt="' . esc_attr( wp_strip_all_tags( $file_name ) ) . '" />';
 				echo '</a>';
-
-				echo '</li>';
 			}
 
-			echo '</ul>';
-			echo '</div>';
+			echo '<a href="' . $file_url_esc . '" download>';
+			echo $label;
+			echo '</a>';
+
+			echo '</li>';
 		}
 
-		echo '</div>';
+		echo '</ul>';
 		echo '</div>';
 	}
 
 	/**
-	 * Detect image by URL extension
+	 * Detect image by URL extension.
 	 *
 	 * @param string $url
 	 * @return bool
@@ -118,12 +182,30 @@ class WCPDU_Admin_Order_Details {
 		}
 
 		$path = parse_url( $url, PHP_URL_PATH );
-		$ext  = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
 
 		return in_array(
 			$ext,
 			array( 'jpg', 'jpeg', 'png', 'gif', 'webp' ),
 			true
 		);
+	}
+
+	/**
+	 * Check if current admin screen is WooCommerce order edit/view screen.
+	 *
+	 * @return bool
+	 */
+	private function is_order_screen() {
+		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return false;
+		}
+
+		return ( 'shop_order' === $screen->id || 'woocommerce_page_wc-orders' === $screen->id );
 	}
 }
