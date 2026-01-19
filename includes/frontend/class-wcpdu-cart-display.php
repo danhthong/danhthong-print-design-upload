@@ -22,7 +22,6 @@ class WCPDU_Cart_Display {
 	 * Constructor.
 	 */
 	public function __construct() {
-
 		add_filter(
 			'woocommerce_get_item_data',
 			[ $this, 'display_cart_item_data' ],
@@ -34,70 +33,116 @@ class WCPDU_Cart_Display {
 	/**
 	 * Add design file info to cart & checkout.
 	 *
+	 * Expects each file item to contain:
+	 * - name (optional)
+	 * - url  (required)
+	 * - kind (optional): uploaded | final
+	 * - type (optional): mime string
+	 *
 	 * @param array $item_data
 	 * @param array $cart_item
 	 * @return array
 	 */
-  public function display_cart_item_data( $item_data, $cart_item ) {
+	public function display_cart_item_data( $item_data, $cart_item ) {
 
-    if ( empty( $cart_item[ $this->cart_key ] ) ) {
-      return $item_data;
-    }
+		if ( empty( $cart_item[ $this->cart_key ] ) || ! is_array( $cart_item[ $this->cart_key ] ) ) {
+			return $item_data;
+		}
 
-    foreach ( $cart_item[ $this->cart_key ] as $file ) {
+		$uploaded_files = [];
+		$result_files   = [];
 
-      $name = esc_html( $file['name'] ?? '' );
-      $url  = esc_url( $file['url'] ?? '' );
-      $type = $file['type'] ?? '';
+		foreach ( $cart_item[ $this->cart_key ] as $file ) {
 
-      if ( empty( $url ) ) {
-        continue;
-      }
+			if ( ! is_array( $file ) ) {
+				continue;
+			}
 
-      $value = '';
+			$kind = isset( $file['kind'] ) ? (string) $file['kind'] : 'uploaded';
 
-      // Image preview
-      if ( $this->is_image( $type ) ) {
-        $value .= sprintf(
-          '<img src="%s" alt="%s" style="max-width:80px;display:block;margin-bottom:5px;" />',
-          $url,
-          $name
-        );
-      }
+			if ( 'final' === $kind ) {
+				$result_files[] = $file;
+			} else {
+				$uploaded_files[] = $file;
+			}
+		}
 
-      // File link
-      $value .= sprintf(
-        '<a href="%s" target="_blank" rel="noopener" data-wcpdu-lightbox>%s</a>',
-        $url,
-        $name ? $name : esc_html__( 'View file', 'wcpdu' )
-      );
+		if ( ! empty( $uploaded_files ) ) {
+			$item_data[] = [
+				'key'     => esc_html__( 'Design File', 'wcpdu' ),
+				'value'   => $this->render_files_html( $uploaded_files ),
+				'display' => '',
+			];
+		}
 
-      $item_data[] = [
-        'key'     => esc_html__( 'Design File', 'wcpdu' ),
-        'value'   => $value,
-        'display' => '',
-      ];
-    }
+		if ( ! empty( $result_files ) ) {
+			$item_data[] = [
+				'key'     => esc_html__( 'Result File', 'wcpdu' ),
+				'value'   => $this->render_files_html( $result_files ),
+				'display' => '',
+			];
+		}
 
-    return $item_data;
-  }
+		return $item_data;
+	}
 
-  /**
-   * Check if file is an image.
-   *
-   * @param string $mime
-   * @return bool
-   */
-  private function is_image( $mime ) {
+	/**
+	 * Render files list HTML (with image preview if possible).
+	 *
+	 * @param array $files
+	 * @return string
+	 */
+	private function render_files_html( array $files ) {
 
-    return in_array(
-      $mime,
-      [
-        'image/jpeg',
-        'image/png',
-        'image/webp',
-      ],
-      true
-    );
-  }
+		$html = '<div class="wcpdu-cart-files">';
+
+		foreach ( $files as $file ) {
+
+			$name = isset( $file['name'] ) ? (string) $file['name'] : '';
+			$url  = isset( $file['url'] ) ? (string) $file['url'] : '';
+			$mime = isset( $file['type'] ) ? (string) $file['type'] : '';
+
+			$url_esc = esc_url( $url );
+			if ( empty( $url_esc ) ) {
+				continue;
+			}
+
+			$label = $name ? esc_html( $name ) : esc_html__( 'View file', 'wcpdu' );
+
+			$html .= '<div class="wcpdu-cart-file" style="margin:0 0 10px;">';
+
+			$html .= sprintf(
+				'<a href="%1$s" rel="noopener" data-wcpdu-lightbox>%2$s</a>',
+				$url_esc,
+				$label
+			);
+
+			$html .= '</div>';
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Detect image by MIME or URL extension.
+	 *
+	 * @param string $mime
+	 * @param string $url
+	 * @return bool
+	 */
+	private function is_image( $mime, $url ) {
+
+		$mime = (string) $mime;
+
+		if ( in_array( $mime, [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif' ], true ) ) {
+			return true;
+		}
+
+		$path = parse_url( (string) $url, PHP_URL_PATH );
+		$ext  = strtolower( pathinfo( (string) $path, PATHINFO_EXTENSION ) );
+
+		return in_array( $ext, [ 'jpg', 'jpeg', 'png', 'webp', 'gif' ], true );
+	}
 }

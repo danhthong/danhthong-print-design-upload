@@ -68,6 +68,7 @@ class WCPDU_Cart_Handler {
 					$data['final'] = [
 						'url'  => trailingslashit( $uploads['baseurl'] ) . $subdir . $filename,
 						'path' => $file_path,
+						'kind' => 'final',
 					];
 				}
 			}
@@ -104,6 +105,7 @@ class WCPDU_Cart_Handler {
 				$data['original'] = [
 					'url'  => $upload['url'],
 					'path' => $upload['file'],
+					'kind' => 'uploaded',
 				];
 			}
 		}
