@@ -18,10 +18,5 @@ class WCPDU_I18n {
 	 */
 	public function load_textdomain() {
 
-		load_plugin_textdomain(
-			'wcpdu',
-			false,
-			dirname( plugin_basename( WCPDU_PLUGIN_DIR ) ) . '/languages/'
-		);
 	}
 }

@@ -44,8 +44,8 @@ class WCPDU_Admin_Product_Meta {
 		woocommerce_wp_checkbox(
 			[
 				'id'          => self::META_KEY,
-				'label'       => __( 'Enable design upload', 'wcpdu' ),
-				'description' => __( 'Allow customers to upload design files for this product.', 'wcpdu' ),
+				'label'       => __( 'Enable design upload', 'product-design-upload-for-ecommerce' ),
+				'description' => __( 'Allow customers to upload design files for this product.', 'product-design-upload-for-ecommerce' ),
 			]
 		);
 	}

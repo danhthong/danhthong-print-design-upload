@@ -69,7 +69,7 @@ class WCPDU_Cart_Display {
 
 		if ( ! empty( $uploaded_files ) ) {
 			$item_data[] = [
-				'key'     => esc_html__( 'Design File', 'wcpdu' ),
+				'key'     => esc_html__( 'Design File', 'product-design-upload-for-ecommerce' ),
 				'value'   => $this->render_files_html( $uploaded_files ),
 				'display' => '',
 			];
@@ -77,7 +77,7 @@ class WCPDU_Cart_Display {
 
 		if ( ! empty( $result_files ) ) {
 			$item_data[] = [
-				'key'     => esc_html__( 'Result File', 'wcpdu' ),
+				'key'     => esc_html__( 'Result File', 'product-design-upload-for-ecommerce' ),
 				'value'   => $this->render_files_html( $result_files ),
 				'display' => '',
 			];
@@ -107,7 +107,7 @@ class WCPDU_Cart_Display {
 				continue;
 			}
 
-			$label = $name ? esc_html( $name ) : esc_html__( 'View file', 'wcpdu' );
+			$label = $name ? esc_html( $name ) : esc_html__( 'View file', 'product-design-upload-for-ecommerce' );
 
 			$html .= '<div class="wcpdu-cart-file" style="margin:0 0 10px;">';
 

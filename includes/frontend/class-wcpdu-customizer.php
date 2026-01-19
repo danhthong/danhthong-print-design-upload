@@ -66,7 +66,7 @@ class WCPDU_Customizer {
 		?>
 		<div class="wcpdu-entry">
 			<button type="button" class="button wp-element-button wcpdu-open-customizer primary">
-				<?php echo esc_html__( 'Customize', 'wcpdu' ); ?>
+				<?php echo esc_html__( 'Customize', 'product-design-upload-for-ecommerce' ); ?>
 			</button>
 		</div>
 
@@ -74,10 +74,10 @@ class WCPDU_Customizer {
 		<div id="wcpdu-customizer-modal" class="wcpdu-modal" aria-hidden="true" style="display:none;">
 			<div class="wcpdu-modal-overlay" data-wcpdu-modal-close="1"></div>
 
-			<div class="wcpdu-modal-dialog" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr__( 'Product customizer', 'wcpdu' ); ?>">
+			<div class="wcpdu-modal-dialog" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr__( 'Product customizer', 'product-design-upload-for-ecommerce' ); ?>">
 				<div class="wcpdu-modal-header">
-					<h3 class="wcpdu-modal-title"><?php echo esc_html__( 'Customize Your Product', 'wcpdu' ); ?></h3>
-					<button type="button" class="wcpdu-modal-close" data-wcpdu-modal-close="1" aria-label="<?php echo esc_attr__( 'Close', 'wcpdu' ); ?>">×</button>
+					<h3 class="wcpdu-modal-title"><?php echo esc_html__( 'Customize Your Product', 'product-design-upload-for-ecommerce' ); ?></h3>
+					<button type="button" class="wcpdu-modal-close" data-wcpdu-modal-close="1" aria-label="<?php echo esc_attr__( 'Close', 'product-design-upload-for-ecommerce' ); ?>">×</button>
 				</div>
 
 				<div class="wcpdu-modal-body wcpdu-modal-grid">
@@ -90,7 +90,7 @@ class WCPDU_Customizer {
 					<div class="wcpdu-modal-col wcpdu-modal-col-right">
 						<div class="wcpdu-form-block">
 							<label for="wcpdu-upload-image">
-								<?php echo esc_html__( 'Upload Image/Design File', 'wcpdu' ); ?><span>*</span>
+								<?php echo esc_html__( 'Upload Image/Design File', 'product-design-upload-for-ecommerce' ); ?><span>*</span>
 							</label>
 
 							<label for="wcpdu-upload-image" class="custom-file-upload">
@@ -101,10 +101,10 @@ class WCPDU_Customizer {
 								</svg>
 
 								<p id="file-name">
-									<span><?php echo esc_html__( 'Click to upload', 'wcpdu' ); ?></span>
-									<?php echo esc_html__( ' or drag and drop', 'wcpdu' ); ?>
+									<span><?php echo esc_html__( 'Click to upload', 'product-design-upload-for-ecommerce' ); ?></span>
+									<?php echo esc_html__( ' or drag and drop', 'product-design-upload-for-ecommerce' ); ?>
 									<br>
-									<?php echo esc_html__( 'SVG, PNG, JPG (max. 800x400px)', 'wcpdu' ); ?>
+									<?php echo esc_html__( 'SVG, PNG, JPG (max. 800x400px)', 'product-design-upload-for-ecommerce' ); ?>
 								</p>
 							</label>
 
@@ -117,15 +117,15 @@ class WCPDU_Customizer {
 						</div>
 
 						<div class="wcpdu-toolbar">
-							<button type="button" class="wcpdu-btn wcpdu-remove-object" aria-label="<?php echo esc_attr__( 'Remove selected object', 'wcpdu' ); ?>">
-								✕ <?php echo esc_html__( 'Clear image', 'wcpdu' ); ?>
+							<button type="button" class="wcpdu-btn wcpdu-remove-object" aria-label="<?php echo esc_attr__( 'Remove selected object', 'product-design-upload-for-ecommerce' ); ?>">
+								✕ <?php echo esc_html__( 'Clear image', 'product-design-upload-for-ecommerce' ); ?>
 							</button>
 						</div>
 
 						<p class="wcpdu-tooltip">
 							<?php
 							echo wp_kses_post(
-								__( 'Tip: Click the image on the left to select it. Drag to move it, use the corner handles to resize, and drag while holding <strong>Shift</strong> to keep proportions.', 'wcpdu' )
+								__( 'Tip: Click the image on the left to select it. Drag to move it, use the corner handles to resize, and drag while holding <strong>Shift</strong> to keep proportions.', 'product-design-upload-for-ecommerce' )
 							);
 							?>
 						</p>
@@ -137,10 +137,10 @@ class WCPDU_Customizer {
 
 				<div class="wcpdu-modal-footer">
 					<button type="button" class="button wp-element-button wcpdu-cancel" data-wcpdu-modal-close="1">
-						<?php echo esc_html__( 'Cancel', 'wcpdu' ); ?>
+						<?php echo esc_html__( 'Cancel', 'product-design-upload-for-ecommerce' ); ?>
 					</button>
 					<button type="button" class="button wp-element-button button-primary wcpdu-apply">
-						<?php echo esc_html__( 'Apply', 'wcpdu' ); ?>
+						<?php echo esc_html__( 'Apply', 'product-design-upload-for-ecommerce' ); ?>
 					</button>
 				</div>
 			</div>
