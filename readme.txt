@@ -34,11 +34,13 @@ This plugin is designed for stores that sell personalized products (e.g., t-shir
 
 == Usage ==
 
-1. Go to Products → Edit product.
-2. Enable the design upload option for that product.
-3. On the product page, click the "Customize" button.
-4. Upload an image, move/scale it on the canvas, then click "Apply".
-5. Add to cart. The merged PNG is saved and attached to the cart item and order item meta.
+1. Go to WooCommerce → Product Design Upload Settings (wp-admin/admin.php?page=wcpdu-settings) and enable the option to allow customers to upload designs.
+2. Go to Products → Edit product.
+3. Enable the design upload option for that product.
+4. On the product page, click the "Customize" button.
+5. Upload an image, move/scale it on the canvas, then click "Apply".
+6. Add to cart. The merged PNG is saved and attached to the cart item and order item meta.
+
 
 == Frequently Asked Questions ==
 
