@@ -34,10 +34,31 @@
     window.wcpduFabricCanvas.discardActiveObject();
     window.wcpduFabricCanvas.renderAll();
 
+    var targetSize = 1024;
+    var w =
+      typeof window.wcpduFabricCanvas.getWidth === "function"
+        ? window.wcpduFabricCanvas.getWidth()
+        : 0;
+    var h =
+      typeof window.wcpduFabricCanvas.getHeight === "function"
+        ? window.wcpduFabricCanvas.getHeight()
+        : 0;
+
+    var base = Math.max(w, h);
+    var multiplier = 1;
+
+    if (base > 0) {
+      multiplier = targetSize / base;
+      if (!isFinite(multiplier) || multiplier <= 0) {
+        multiplier = 1;
+      }
+    }
+
     try {
       return window.wcpduFabricCanvas.toDataURL({
         format: "png",
         quality: 1,
+        multiplier: multiplier,
       });
     } catch (e) {
       return "";
@@ -55,32 +76,26 @@
     }
     if (!$mainImg.length) return;
 
-    // Update main image + common WC zoom/lightbox attributes
     $mainImg.attr("src", dataUrl);
     $mainImg.attr("data-src", dataUrl);
     $mainImg.attr("data-large_image", dataUrl);
-    $mainImg.attr("data-large_image_width", "");
-    $mainImg.attr("data-large_image_height", "");
+    $mainImg.attr("data-large_image_width", "1024");
+    $mainImg.attr("data-large_image_height", "1024");
     $mainImg.attr("srcset", "");
     $mainImg.attr("sizes", "");
 
-    // Some themes/plugins use parent <a> href for lightbox
     var $link = $mainImg.closest("a");
     if ($link.length) {
       $link.attr("href", dataUrl);
     }
 
-    // Update the injected zoom image (e.g. ElevateZoom creates <img class="zoomImg">)
     var $zoomImg = $(".zoomImg");
     if ($zoomImg.length) {
       $zoomImg.attr("src", dataUrl);
     }
 
-    // If zoom plugin caches background/containers, remove the zoom image to force refresh
-    // (it will be recreated on next hover/move by most zoom libs)
     $zoomImg.remove();
 
-    // Best-effort: destroy elevateZoom if present (prevents stale cache on some themes)
     try {
       if ($mainImg.data("elevateZoom")) {
         $mainImg.data("elevateZoom").destroy();
@@ -89,9 +104,8 @@
       }
     } catch (e) {}
 
-    // Update first thumbnail if present
     var $thumb = $(
-      ".flex-control-nav img, .woocommerce-product-gallery__thumbs img",
+      ".flex-control-nav img, .woocommerce-product-gallery__thumbs img"
     ).first();
     if ($thumb.length) {
       $thumb.attr("src", dataUrl);
@@ -100,7 +114,6 @@
       $thumb.attr("sizes", "");
     }
 
-    // Re-init WC product gallery scripts (theme-dependent)
     if ($gallery.length) {
       $gallery.trigger("woocommerce_gallery_init");
       $gallery.trigger("wc-product-gallery-after-init");
@@ -129,7 +142,6 @@
   $(document).on("click", ".wcpdu-apply", function (e) {
     e.preventDefault();
 
-    // Remove active object selection before exporting
     if (
       window.wcpduFabricCanvas &&
       typeof window.wcpduFabricCanvas.discardActiveObject === "function"
