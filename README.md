@@ -1,10 +1,10 @@
-# RO Print Design Upload
+# DanhThong Print Design Upload
 
 Let customers upload an image, position it on a product canvas, and save the final design with the cart/order in WooCommerce.
 
 ## Description
 
-RO Print Design Upload adds a simple product customizer to WooCommerce products.
+DanhThong Print Design Upload adds a simple product customizer to WooCommerce products.
 
 **Features**
 - Enable/disable design upload per product.
@@ -25,7 +25,7 @@ This plugin is designed for stores that sell personalized products (e.g., t-shir
 
 ## Installation
 
-1. Upload the plugin folder to `wp-content/plugins/ro-print-design-upload/`
+1. Upload the plugin folder to `wp-content/plugins/danhthong-print-design-upload/`
    or install the ZIP via **Plugins → Add New → Upload Plugin**.
 2. Activate the plugin through the **Plugins** screen in WordPress.
 3. Make sure WooCommerce is installed and active.

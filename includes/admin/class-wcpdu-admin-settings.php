@@ -42,14 +42,14 @@ class WCPDU_Admin_Settings {
 
 		add_settings_section(
 			'wcpdu_general_section',
-			__( 'General Settings', 'ro-print-design-upload' ),
+			__( 'General Settings', 'danhthong-print-design-upload' ),
 			'__return_false',
 			'wcpdu-settings'
 		);
 
 		add_settings_field(
 			'enable_upload',
-			__( 'Enable design upload', 'ro-print-design-upload' ),
+			__( 'Enable design upload', 'danhthong-print-design-upload' ),
 			[ $this, 'render_enable_upload_field' ],
 			'wcpdu-settings',
 			'wcpdu_general_section'
@@ -57,7 +57,7 @@ class WCPDU_Admin_Settings {
 
 		add_settings_field(
 			'max_file_size',
-			__( 'Maximum file size (MB)', 'ro-print-design-upload' ),
+			__( 'Maximum file size (MB)', 'danhthong-print-design-upload' ),
 			[ $this, 'render_max_file_size_field' ],
 			'wcpdu-settings',
 			'wcpdu_general_section'
@@ -65,7 +65,7 @@ class WCPDU_Admin_Settings {
 
 		add_settings_field(
 			'allowed_file_types',
-			__( 'Allowed file types', 'ro-print-design-upload' ),
+			__( 'Allowed file types', 'danhthong-print-design-upload' ),
 			[ $this, 'render_allowed_file_types_field' ],
 			'wcpdu-settings',
 			'wcpdu_general_section'
@@ -137,7 +137,7 @@ class WCPDU_Admin_Settings {
 			       name="<?php echo esc_attr( $this->option_name ); ?>[enable_upload]"
 			       value="1"
 			       <?php checked( 1, $options['enable_upload'] ?? 0 ); ?>>
-			<?php esc_html_e( 'Allow customers to upload design files', 'ro-print-design-upload' ); ?>
+			<?php esc_html_e( 'Allow customers to upload design files', 'danhthong-print-design-upload' ); ?>
 		</label>
 
 		<?php
@@ -160,7 +160,7 @@ class WCPDU_Admin_Settings {
 		       value="<?php echo esc_attr( $value ); ?>" />
 
 		<p class="description">
-			<?php esc_html_e( 'Maximum upload file size in megabytes.', 'ro-print-design-upload' ); ?>
+			<?php esc_html_e( 'Maximum upload file size in megabytes.', 'danhthong-print-design-upload' ); ?>
 		</p>
 
 		<?php
@@ -183,7 +183,7 @@ class WCPDU_Admin_Settings {
 		       value="<?php echo esc_attr( $value ); ?>" />
 
 		<p class="description">
-			<?php esc_html_e( 'Comma-separated list (e.g. jpg,png,pdf,ai).', 'ro-print-design-upload' ); ?>
+			<?php esc_html_e( 'Comma-separated list (e.g. jpg,png,pdf,ai).', 'danhthong-print-design-upload' ); ?>
 		</p>
 
 		<?php

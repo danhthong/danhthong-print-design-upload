@@ -38,7 +38,7 @@ class WCPDU_MyAccount_Display {
     }
 
     echo '<div class="wcpdu-myaccount-files">';
-    echo '<strong>' . esc_html__( 'Your Design', 'ro-print-design-upload' ) . '</strong>';
+    echo '<strong>' . esc_html__( 'Your Design', 'danhthong-print-design-upload' ) . '</strong>';
 
     foreach ( $files as $type => $file ) {
 

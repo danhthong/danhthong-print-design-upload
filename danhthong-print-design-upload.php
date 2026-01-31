@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: RO Print Design Upload
+ * Plugin Name: DanhThong Print Design Upload
  * Plugin URI: https://wpdu.danhthong.com
  * Description: Allow customers to upload design files when purchasing products.
  * Version: 1.0.0
  * Author: Thong Dang
  * Author URI: https://danhthong.com
- * Text Domain: ro-print-design-upload
+ * Text Domain: danhthong-print-design-upload
  * Domain Path: /languages
  * Requires at least: 6.0
  * Requires PHP: 7.4

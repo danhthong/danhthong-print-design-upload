@@ -2,8 +2,8 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: RO Print Design Upload 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ro-print-design-upload\n"
+"Project-Id-Version: DanhThong Print Design Upload 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/danhthong-print-design-upload\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,26 +15,26 @@ msgstr ""
 "X-Domain: wcpdu\n"
 
 #. Plugin Name of the plugin
-#: ro-print-design-upload.php
-msgid "RO Print Design Upload"
+#: danhthong-print-design-upload.php
+msgid "DanhThong Print Design Upload"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: ro-print-design-upload.php
+#: danhthong-print-design-upload.php
 msgid "https://wpdu.danhthong.com"
 msgstr ""
 
 #. Description of the plugin
-#: ro-print-design-upload.php
+#: danhthong-print-design-upload.php
 msgid "Allow customers to upload design files when purchasing products."
 msgstr ""
 
 #. Author of the plugin
-#: ro-print-design-upload.php
+#: danhthong-print-design-upload.php
 msgid "Thong Dang"
 msgstr ""
 
 #. Author URI of the plugin
-#: ro-print-design-upload.php
+#: danhthong-print-design-upload.php
 msgid "https://danhthong.com"
 msgstr ""

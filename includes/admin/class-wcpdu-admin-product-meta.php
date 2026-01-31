@@ -44,8 +44,8 @@ class WCPDU_Admin_Product_Meta {
 		woocommerce_wp_checkbox(
 			[
 				'id'          => self::META_KEY,
-				'label'       => __( 'Enable design upload', 'ro-print-design-upload' ),
-				'description' => __( 'Allow customers to upload design files for this product.', 'ro-print-design-upload' ),
+				'label'       => __( 'Enable design upload', 'danhthong-print-design-upload' ),
+				'description' => __( 'Allow customers to upload design files for this product.', 'danhthong-print-design-upload' ),
 			]
 		);
 	}
